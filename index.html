@@ -188,7 +188,7 @@
   .tab.is-active{background:var(--mustard);color:var(--char);border-color:var(--mustard)}
   .panel{scroll-margin-top:calc(var(--bar-h) + 14px);padding-top:46px;margin-top:26px;
          border-top:1px solid var(--hair)}
-  #p-menus{padding-top:0;margin-top:0;border-top:none}
+  #p-smash{padding-top:0;margin-top:0;border-top:none}
   .panel__head{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;
                gap:16px;margin-bottom:18px}
   .panel__title{font-family:var(--display);font-weight:800;font-stretch:112%;
@@ -199,6 +199,8 @@
               border-radius:3px;background:rgba(233,178,60,.07);font-family:var(--mono)}
   .menu-badge p{margin:0 0 10px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
                 color:var(--mustard)}
+  .menu-badge p:not(:first-child){margin-top:14px;padding-top:12px;
+                border-top:1px solid rgba(233,178,60,.25)}
   .menu-badge div{padding:7px 0;border-top:1px dashed rgba(239,230,212,.2)}
   .menu-badge div:first-of-type{border-top:none}
   .menu-badge b{display:block;font-family:var(--display);font-weight:800;font-stretch:112%;
@@ -559,8 +561,7 @@
       <p class="warn"><b>Note maquette —</b> les photos de la section « La maison » et l'affiche en bas de page sont des visuels Deal'M. Les vignettes des fiches produit, elles, restent provisoires et générées par IA : elles ne représentent pas les produits servis. Les compositions signalées « à confirmer » restent à valider avec le restaurant.</p>
 
       <nav class="tabs" aria-label="Aller à une section de la carte">
-        <button type="button" class="tab is-active" data-panel="p-menus">Menus</button>
-        <button type="button" class="tab" data-panel="p-smash">Smash burgers</button>
+        <button type="button" class="tab is-active" data-panel="p-smash">Smash burgers</button>
         <button type="button" class="tab" data-panel="p-bao">Baos</button>
         <button type="button" class="tab" data-panel="p-poke">Pokés</button>
         <button type="button" class="tab" data-panel="p-sides">Sides</button>
@@ -568,42 +569,18 @@
         <button type="button" class="tab" data-panel="p-drinks">Boissons</button>
       </nav>
 
-      <div class="panel" id="p-menus">
+      <div class="panel" id="p-smash">
         <div class="panel__head">
-          <h3 class="panel__title">Menus</h3>
+          <h3 class="panel__title">Smash burgers</h3>
           <aside class="menu-badge">
             <p>Formule menu</p>
             <div><b>+ 3,00 €</b><span>frites + boisson soft</span></div>
             <div><b>+ 4,00 €</b><span>frites + boisson premium</span></div>
+            <p>Suppléments frites</p>
+            <div><b>+ 1,00 €</b><span>frites cheddar</span></div>
+            <div><b>+ 2,00 €</b><span>frites cheddar bacon</span></div>
           </aside>
         </div>
-        <p class="subhead">Formule menu — sur n'importe quel smash burger à la carte</p>
-        <div class="grid">
-          <article class="card"><div class="card__img img--burger"></div>
-            <div class="card__body"><h3>Menu boisson soft</h3><p>Frites + boisson soft, ajoutées à un burger de l'onglet « Smash burgers ».</p><div class="price">+ 3,00 €</div></div></article>
-          <article class="card"><div class="card__img img--burger"></div>
-            <div class="card__body"><h3>Menu boisson premium</h3><p>Frites + boisson premium, ajoutées à un burger de l'onglet « Smash burgers ».</p><div class="price">+ 4,00 €</div></div></article>
-        </div>
-        <p class="subhead">Suppléments frites</p>
-        <div class="grid">
-          <article class="card"><div class="card__img img--fries"></div>
-            <div class="card__body"><h3>Frites cheddar</h3><p>En remplacement des frites nature du menu.</p><div class="price">+ 1,00 €</div></div></article>
-          <article class="card"><div class="card__img img--fries"></div>
-            <div class="card__body"><h3>Frites cheddar bacon</h3><p>En remplacement des frites nature du menu.</p><div class="price">+ 2,00 €</div></div></article>
-        </div>
-        <p class="subhead">Autres formules</p>
-        <div class="grid">
-          <article class="card"><div class="card__img img--todo"></div>
-            <div class="card__body"><h3>Menus Bao</h3><p>Bao + frites + boisson.</p><div class="price">à partir de 10,00 €</div></div></article>
-          <article class="card"><div class="card__img img--todo"></div>
-            <div class="card__body"><h3>Menu Kids Chick'n pop</h3><p>Pour les enfants.</p><div class="price">7,50 €</div></div></article>
-          <article class="card"><div class="card__img img--burger"></div>
-            <div class="card__body"><h3>Menu Kids Smash</h3><p>Pour les enfants.</p><div class="price">7,50 €</div></div></article>
-        </div>
-      </div>
-
-      <div class="panel" id="p-smash">
-        <h3 class="panel__title">Smash burgers</h3>
         <div class="grid">
           <article class="card"><div class="card__img img--burger"></div>
             <div class="card__body"><h3>Oklahoma</h3><p>L'original. Steak, cheddar, oignons émincés très finement et grillés, sans sauce.</p><div class="price">Simple 6,40 € · Double 8,90 €</div></div></article>
@@ -616,6 +593,13 @@
           <article class="card"><div class="card__img img--burger"></div>
             <div class="card__body"><h3>DLM</h3><p>Potato bun, double steaks cuits à la moutarde US, cheddar, oignons grillés, salade, tomate, sauce DLM.</p><div class="price">9,40 €</div></div></article>
         </div>
+        <p class="subhead">Menus enfants</p>
+        <div class="grid">
+          <article class="card"><div class="card__img img--todo"></div>
+            <div class="card__body"><h3>Menu Kids Chick'n pop</h3><p>Pour les enfants.</p><div class="price">7,50 €</div></div></article>
+          <article class="card"><div class="card__img img--burger"></div>
+            <div class="card__body"><h3>Menu Kids Smash</h3><p>Pour les enfants.</p><div class="price">7,50 €</div></div></article>
+        </div>
       </div>
 
       <div class="panel" id="p-bao">
@@ -627,6 +611,8 @@
             <div class="card__body"><h3>Bao Chick</h3><p>Pain bao vapeur. Composition à confirmer.</p><div class="price">8,00 €</div></div></article>
           <article class="card"><div class="card__img img--todo"></div>
             <div class="card__body"><h3>Bao Bulgogi</h3><p>Pain bao vapeur. Composition à confirmer.</p><div class="price">9,00 €</div></div></article>
+          <article class="card"><div class="card__img img--todo"></div>
+            <div class="card__body"><h3>Menu Bao</h3><p>Bao + frites + boisson.</p><div class="price">à partir de 10,00 €</div></div></article>
         </div>
       </div>
 
