@@ -61,15 +61,18 @@
   .mark:hover b i{transform:translateY(-3px) rotate(-8deg)}
   .mark span{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;
              text-transform:uppercase;color:var(--smoke);display:block;margin-top:3px}
-  .navlinks{display:flex;gap:20px;font-size:14.5px}
-  .navlinks a{text-decoration:none;color:var(--smoke);position:relative;padding-bottom:3px;
-              transition:color .2s ease}
-  .navlinks a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;
-              background:var(--mustard);transform:scaleX(0);transform-origin:100% 50%;
-              transition:transform .32s var(--ease)}
-  .navlinks a:hover{color:var(--paper)}
-  .navlinks a:hover::after,.navlinks a[aria-current="true"]::after{transform:scaleX(1);transform-origin:0 50%}
-  .navlinks a[aria-current="true"]{color:var(--paper)}
+  /* la pastille moutarde s'ouvre depuis le centre du lien survolé */
+  .navlinks{display:flex;gap:4px;font-size:14.5px}
+  .navlinks a{text-decoration:none;color:var(--smoke);position:relative;z-index:0;
+              padding:8px 15px;border-radius:40px;
+              transition:color .26s ease,box-shadow .3s ease}
+  .navlinks a::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;
+              background:var(--mustard);opacity:0;transform:scale(.3);
+              transition:transform .44s var(--ease),opacity .26s ease}
+  .navlinks a:hover,.navlinks a:focus-visible{color:var(--char)}
+  .navlinks a:hover::before,.navlinks a:focus-visible::before{opacity:1;transform:scale(1)}
+  .navlinks a[aria-current="true"]{color:var(--paper);box-shadow:inset 0 0 0 1px rgba(233,178,60,.45)}
+  .navlinks a[aria-current="true"]:hover{color:var(--char);box-shadow:none}
 
   .navtoggle{display:none;width:40px;height:34px;padding:0;border:1px solid rgba(239,230,212,.22);
     background:transparent;border-radius:2px;cursor:pointer;
@@ -136,10 +139,25 @@
   .hero__sub.lift{animation-delay:.32s}
   .hero__cta.lift{animation-delay:.44s}
 
+  /* bandeau défilant — la piste contient deux copies de la liste,
+     elle glisse de -50% puis reboucle sans saut visible */
   .strip{border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
-         font-family:var(--mono);font-size:13px;color:var(--smoke)}
-  .strip__in{max-width:1180px;margin:0 auto;padding:18px var(--gut);display:flex;flex-wrap:wrap;gap:10px 36px}
-  .strip b{color:var(--paper);font-weight:700}
+         font-family:var(--mono);font-size:13px;color:var(--smoke);overflow:hidden}
+  .ticker{-webkit-mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+          mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+  .ticker__track{display:flex;width:max-content;animation:tick 42s linear infinite}
+  .ticker:hover .ticker__track,.ticker:focus-within .ticker__track{animation-play-state:paused}
+  @keyframes tick{to{transform:translateX(-50%)}}
+  .ticker__row{display:flex;align-items:center;list-style:none;margin:0;padding:0}
+  .ticker__row li{display:flex;align-items:center;white-space:nowrap;padding:17px 0}
+  .ticker__row li::after{content:"";width:5px;height:5px;border-radius:50%;
+    background:var(--mustard);opacity:.5;margin:0 30px;flex:0 0 auto}
+  .ticker b{color:var(--paper);font-weight:700;font-variant-numeric:tabular-nums}
+  .ticker i{font-style:normal;color:var(--mustard);margin-right:6px}
+  @media(max-width:600px){
+    .ticker__track{animation-duration:30s}
+    .ticker__row li::after{margin:0 22px}
+  }
 
   /* ---------- séquence smash épinglée ---------- */
   .smash{position:relative;height:360vh}
@@ -273,7 +291,8 @@
     display:grid;gap:14px 30px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
     font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--smoke)}
   .house__facts b{display:block;font-family:var(--display);font-weight:800;font-stretch:118%;
-    font-size:27px;letter-spacing:-.01em;color:var(--mustard);line-height:1;margin-bottom:5px}
+    font-size:27px;letter-spacing:-.01em;color:var(--mustard);line-height:1;margin-bottom:5px;
+    font-variant-numeric:tabular-nums}
 
   .shot{margin:0;position:relative;overflow:hidden;border-radius:3px;background:#241A13;
     box-shadow:0 22px 44px -26px rgba(0,0,0,.95)}
@@ -392,6 +411,14 @@
     .shot__inner{transform:none!important}
     .shot__inner img,.shot.in .shot__inner img,.shot:hover .shot__inner img{transform:none;transition:none}
     .poster,.poster:hover{transform:none;transition:none}
+    /* le bandeau cesse de défiler et se replie sur plusieurs lignes */
+    .ticker{-webkit-mask:none;mask:none}
+    .ticker__track{animation:none;width:100%}
+    .ticker__row{flex-wrap:wrap;max-width:1180px;margin:0 auto;padding:0 var(--gut)}
+    .ticker__row:last-child{display:none}
+    .ticker__row li{padding:6px 0}
+    .ticker__row li:last-child::after{display:none}
+    .navlinks a::before{transition:none}
     .smash{height:auto}
     .smash__pin{position:static;height:auto;padding:60px 0}
     .steps li{color:var(--paper)}.steps li em{color:var(--mustard)}
@@ -441,10 +468,29 @@
   </section>
 
   <div class="strip">
-    <div class="strip__in">
-      <span><b>4,7/5</b> · 589 avis Google, Bussy</span>
-      <span><b>4,9/5</b> · 331 avis Google, Torcy</span>
-      <span>Sur place · à emporter · click &amp; collect</span>
+    <div class="ticker">
+      <div class="ticker__track">
+        <ul class="ticker__row">
+          <li><i>★</i><b>4,7/5</b>&nbsp;— 589 avis Google, Bussy</li>
+          <li>Viande d'origine française</li>
+          <li>Hachée et préparée sur place</li>
+          <li><i>★</i><b>4,9/5</b>&nbsp;— 331 avis Google, Torcy</li>
+          <li>Potato bun sans OGM</li>
+          <li>Pokés au thon rouge et au saumon</li>
+          <li>Sur place · à emporter · click &amp; collect</li>
+          <li><b>3</b>&nbsp;restaurants en Seine-et-Marne</li>
+        </ul>
+        <ul class="ticker__row" aria-hidden="true">
+          <li><i>★</i><b>4,7/5</b>&nbsp;— 589 avis Google, Bussy</li>
+          <li>Viande d'origine française</li>
+          <li>Hachée et préparée sur place</li>
+          <li><i>★</i><b>4,9/5</b>&nbsp;— 331 avis Google, Torcy</li>
+          <li>Potato bun sans OGM</li>
+          <li>Pokés au thon rouge et au saumon</li>
+          <li>Sur place · à emporter · click &amp; collect</li>
+          <li><b>3</b>&nbsp;restaurants en Seine-et-Marne</li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -694,9 +740,9 @@
         <p class="rise">Toutes nos viandes sont d'origine française, hachées et préparées sur place. Nos burgers sont servis dans un potato bun sans OGM.</p>
         <p class="rise">À côté du smash, la carte propose des pokés au thon rouge et au saumon, à composer en taille L ou XL, ou en version signature. Sur place, à emporter et en livraison.</p>
         <ul class="house__facts rise">
-          <li><b>3</b>restaurants en Seine-et-Marne</li>
-          <li><b>100 %</b>viande d'origine française</li>
-          <li><b>920</b>avis Google cumulés</li>
+          <li><b data-count="3">3</b>restaurants en Seine-et-Marne</li>
+          <li><b data-count="100" data-suffix=" %">100 %</b>viande d'origine française</li>
+          <li><b data-count="920">920</b>avis Google cumulés</li>
         </ul>
       </div>
 
@@ -923,6 +969,41 @@
     });
   },{threshold:.12, rootMargin:'0px 0px -40px'});
   try { els.forEach(function(el){ io.observe(el); }); } catch(e){ showAll(); }
+})();
+</script>
+<script>
+/* ---- chiffres clés qui comptent à l'entrée dans le champ ----------------
+   Les valeurs finales sont déjà écrites dans le HTML : sans JavaScript,
+   sans IntersectionObserver ou en mouvement réduit, elles restent lisibles. */
+(function(){
+  var els = Array.prototype.slice.call(document.querySelectorAll('[data-count]'));
+  if(!els.length || !('IntersectionObserver' in window)) return;
+  var mq = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  if(mq && mq.matches) return;
+
+  function write(el, v){
+    el.textContent = v.toLocaleString('fr-FR') + (el.dataset.suffix || '');
+  }
+  els.forEach(function(el){ write(el, 0); });          /* remise à zéro avant l'entrée */
+
+  function run(el){
+    var to = parseFloat(el.dataset.count) || 0, dur = 1500, t0 = null;
+    function step(t){
+      if(t0 === null) t0 = t;
+      var p = Math.min(1, (t - t0) / dur);
+      write(el, Math.round(to * (1 - Math.pow(1 - p, 3))));   /* easeOutCubic */
+      if(p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ run(e.target); io.unobserve(e.target); }
+    });
+  }, {threshold:.6});
+  try { els.forEach(function(el){ io.observe(el); }); }
+  catch(e){ els.forEach(function(el){ write(el, parseFloat(el.dataset.count) || 0); }); }
 })();
 </script>
 <script>
