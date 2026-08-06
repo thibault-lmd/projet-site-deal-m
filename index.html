@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=Instrument+Sans:wght@400..700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<noscript><style>.rise{opacity:1!important;transform:none!important}.reveal::before{display:none!important}.smash{height:auto!important}.smash__pin{position:static!important;height:auto!important;padding:60px 0}.steps li{color:#EFE6D4}.steps li em{color:#E9B23C}.shot__inner img{transform:none!important}.preloader,.cursor{display:none!important}</style></noscript>
+<noscript><style>.rise{opacity:1!important;transform:none!important}.reveal::before{display:none!important}.smash{height:auto!important}.smash__pin{position:static!important;height:auto!important;padding:60px 0}.steps li{color:#EFE6D4}.steps li em{color:#E9B23C}.shot__inner img{transform:none!important}.preloader{display:none!important}</style></noscript>
 <style>
   /* Photos Deal'M (plancha, gros plan, affiche) : visuels réels.
      Fiches produit : visuels provisoires générés par IA, à remplacer. */
@@ -185,8 +185,25 @@
        background:transparent;color:var(--smoke);border:1px solid rgba(239,230,212,.18);
        transition:color .18s,border-color .18s,background .18s,transform .22s var(--ease)}
   .tab:hover{color:var(--paper);border-color:rgba(239,230,212,.4);transform:translateY(-1px)}
-  .tab[aria-selected="true"]{background:var(--mustard);color:var(--char);border-color:var(--mustard)}
-  .panel[hidden]{display:none}
+  .tab.is-active{background:var(--mustard);color:var(--char);border-color:var(--mustard)}
+  .panel{scroll-margin-top:calc(var(--bar-h) + 14px);padding-top:46px;margin-top:26px;
+         border-top:1px solid var(--hair)}
+  #p-menus{padding-top:0;margin-top:0;border-top:none}
+  .panel__head{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;
+               gap:16px;margin-bottom:18px}
+  .panel__title{font-family:var(--display);font-weight:800;font-stretch:112%;
+                text-transform:uppercase;font-size:clamp(21px,3.2vw,28px);letter-spacing:-.01em;
+                margin:0 0 18px}
+  .panel__head .panel__title{margin-bottom:0}
+  .menu-badge{flex:0 0 auto;width:168px;padding:14px;border:1px solid rgba(233,178,60,.4);
+              border-radius:3px;background:rgba(233,178,60,.07);font-family:var(--mono)}
+  .menu-badge p{margin:0 0 10px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+                color:var(--mustard)}
+  .menu-badge div{padding:7px 0;border-top:1px dashed rgba(239,230,212,.2)}
+  .menu-badge div:first-of-type{border-top:none}
+  .menu-badge b{display:block;font-family:var(--display);font-weight:800;font-stretch:112%;
+                font-size:17px;color:var(--paper);letter-spacing:-.005em}
+  .menu-badge span{display:block;font-size:10.5px;color:var(--smoke);margin-top:2px;line-height:1.35}
   .panel{animation:panelIn .45s var(--ease) both}
   @keyframes panelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
@@ -395,20 +412,6 @@
   .preloader__bar i{display:block;height:100%;width:0%;background:var(--mustard)}
   .preloader.is-done{opacity:0;visibility:hidden;pointer-events:none}
 
-  /* ---------- curseur personnalisé ---------- */
-  .cursor{position:fixed;top:0;left:0;z-index:150;pointer-events:none;opacity:0;transition:opacity .3s ease}
-  .cursor.is-on{opacity:1}
-  .cursor__dot{position:absolute;top:0;left:0;width:6px;height:6px;margin:-3px 0 0 -3px;
-    border-radius:50%;background:var(--mustard)}
-  .cursor__ring{position:absolute;top:0;left:0;width:38px;height:38px;margin:-19px 0 0 -19px;
-    border-radius:50%;border:1px solid rgba(239,230,212,.5);
-    transition:width .3s var(--ease),height .3s var(--ease),margin .3s var(--ease),
-      border-color .3s ease,background .3s ease}
-  .cursor.is-hover .cursor__ring{width:64px;height:64px;margin:-32px 0 0 -32px;
-    border-color:var(--mustard);background:rgba(233,178,60,.1)}
-  body.has-cursor,body.has-cursor a,body.has-cursor button{cursor:none}
-  @media(hover:none),(pointer:coarse){.cursor{display:none!important}}
-
   /* ---------- couche WebGL du hero (grain + lueurs) ---------- */
   .hero__gl{position:absolute;inset:0;z-index:1;mix-blend-mode:soft-light;opacity:.9;pointer-events:none}
   .hero__gl canvas{display:block;width:100%;height:100%}
@@ -432,7 +435,8 @@
   /* ---------- pastille glissante des onglets ---------- */
   .tabs.has-pill{position:relative}
   .tabs.has-pill .tab{position:relative;z-index:1}
-  .tabs.has-pill .tab[aria-selected="true"]{background:transparent}
+  .tabs.has-pill .tab.is-active{background:transparent}
+  @media(max-width:520px){.menu-badge{width:100%}}
   .tab__pill{position:absolute;z-index:0;background:var(--mustard);border-radius:2px;opacity:0}
 
   /* ---------- bascule 3D des fiches carte ---------- */
@@ -451,7 +455,7 @@
     .smash__pin{position:static;height:auto;padding:60px 0}
     .steps li{color:var(--paper)}.steps li em{color:var(--mustard)}
     html{scroll-behavior:auto}
-    .preloader,.cursor,.hero__gl,.shot__gl,.poster__gl{display:none!important}
+    .preloader,.hero__gl,.shot__gl,.poster__gl{display:none!important}
   }
   :focus-visible{outline:2px solid var(--mustard);outline-offset:3px}
 </style>
@@ -462,8 +466,6 @@
   <p class="preloader__mark"><b>Deal<i>'</i>M</b></p>
   <div class="preloader__bar"><i id="preloaderBar"></i></div>
 </div>
-<div class="cursor" id="cursor" aria-hidden="true"><i class="cursor__dot"></i><i class="cursor__ring"></i></div>
-
 <header class="bar">
   <div class="bar__in">
     <a class="mark" href="#top"><b>Deal<i>'</i>M</b><span>Smash burgers &amp; poké</span></a>
@@ -556,22 +558,30 @@
       </div>
       <p class="warn"><b>Note maquette —</b> les photos de la section « La maison » et l'affiche en bas de page sont des visuels Deal'M. Les vignettes des fiches produit, elles, restent provisoires et générées par IA : elles ne représentent pas les produits servis. Les compositions signalées « à confirmer » restent à valider avec le restaurant.</p>
 
-      <div class="tabs" role="tablist">
-        <button type="button" class="tab" role="tab" aria-selected="true"  aria-controls="p-menus" id="tab-p-menus" data-panel="p-menus">Menus</button>
-        <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="p-smash" id="tab-p-smash" data-panel="p-smash">Smash burgers</button>
-        <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="p-bao" id="tab-p-bao" data-panel="p-bao">Baos</button>
-        <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="p-poke" id="tab-p-poke" data-panel="p-poke">Pokés</button>
-        <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="p-sides" id="tab-p-sides" data-panel="p-sides">Sides</button>
-        <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="p-sweet" id="tab-p-sweet" data-panel="p-sweet">Desserts</button>
-        <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="p-drinks" id="tab-p-drinks" data-panel="p-drinks">Boissons</button>
-      </div>
+      <nav class="tabs" aria-label="Aller à une section de la carte">
+        <button type="button" class="tab is-active" data-panel="p-menus">Menus</button>
+        <button type="button" class="tab" data-panel="p-smash">Smash burgers</button>
+        <button type="button" class="tab" data-panel="p-bao">Baos</button>
+        <button type="button" class="tab" data-panel="p-poke">Pokés</button>
+        <button type="button" class="tab" data-panel="p-sides">Sides</button>
+        <button type="button" class="tab" data-panel="p-sweet">Desserts</button>
+        <button type="button" class="tab" data-panel="p-drinks">Boissons</button>
+      </nav>
 
-      <div class="panel" id="p-menus" role="tabpanel" aria-labelledby="tab-p-menus" tabindex="0">
+      <div class="panel" id="p-menus">
+        <div class="panel__head">
+          <h3 class="panel__title">Menus</h3>
+          <aside class="menu-badge">
+            <p>Formule menu</p>
+            <div><b>+ 3,00 €</b><span>frites + boisson soft</span></div>
+            <div><b>+ 4,00 €</b><span>frites + boisson premium</span></div>
+          </aside>
+        </div>
         <p class="subhead">Formule menu — sur n'importe quel smash burger à la carte</p>
         <div class="grid">
-          <article class="card"><div class="card__img img--fries"></div>
+          <article class="card"><div class="card__img img--burger"></div>
             <div class="card__body"><h3>Menu boisson soft</h3><p>Frites + boisson soft, ajoutées à un burger de l'onglet « Smash burgers ».</p><div class="price">+ 3,00 €</div></div></article>
-          <article class="card"><div class="card__img img--fries"></div>
+          <article class="card"><div class="card__img img--burger"></div>
             <div class="card__body"><h3>Menu boisson premium</h3><p>Frites + boisson premium, ajoutées à un burger de l'onglet « Smash burgers ».</p><div class="price">+ 4,00 €</div></div></article>
         </div>
         <p class="subhead">Suppléments frites</p>
@@ -592,7 +602,8 @@
         </div>
       </div>
 
-      <div class="panel" id="p-smash" role="tabpanel" aria-labelledby="tab-p-smash" tabindex="0" hidden>
+      <div class="panel" id="p-smash">
+        <h3 class="panel__title">Smash burgers</h3>
         <div class="grid">
           <article class="card"><div class="card__img img--burger"></div>
             <div class="card__body"><h3>Oklahoma</h3><p>L'original. Steak, cheddar, oignons émincés très finement et grillés, sans sauce.</p><div class="price">Simple 6,40 € · Double 8,90 €</div></div></article>
@@ -607,7 +618,8 @@
         </div>
       </div>
 
-      <div class="panel" id="p-bao" role="tabpanel" aria-labelledby="tab-p-bao" tabindex="0" hidden>
+      <div class="panel" id="p-bao">
+        <h3 class="panel__title">Baos</h3>
         <div class="grid">
           <article class="card"><div class="card__img img--todo"></div>
             <div class="card__body"><h3>Bao Fusion</h3><p>Pain bao vapeur. Composition à confirmer.</p><div class="price">7,00 €</div></div></article>
@@ -618,7 +630,8 @@
         </div>
       </div>
 
-      <div class="panel" id="p-poke" role="tabpanel" aria-labelledby="tab-p-poke" tabindex="0" hidden>
+      <div class="panel" id="p-poke">
+        <h3 class="panel__title">Pokés</h3>
         <p class="subhead">Les pokés signature — 9,90 €</p>
         <div class="grid">
           <article class="card"><div class="card__img img--todo"></div>
@@ -669,7 +682,8 @@
         </div>
       </div>
 
-      <div class="panel" id="p-sides" role="tabpanel" aria-labelledby="tab-p-sides" tabindex="0" hidden>
+      <div class="panel" id="p-sides">
+        <h3 class="panel__title">Sides</h3>
         <div class="grid">
           <article class="card"><div class="card__img img--fries"></div>
             <div class="card__body"><h3>Frites nature</h3><p>Coupe crinkle.</p><div class="price">2,00 €</div></div></article>
@@ -690,7 +704,8 @@
         </div>
       </div>
 
-      <div class="panel" id="p-sweet" role="tabpanel" aria-labelledby="tab-p-sweet" tabindex="0" hidden>
+      <div class="panel" id="p-sweet">
+        <h3 class="panel__title">Desserts</h3>
         <div class="grid">
           <article class="card"><div class="card__img img--todo"></div>
             <div class="card__body"><h3>Milkshake</h3><p>Vanille, Nutella, beurre de cacahuète, Kinder Bueno, Kinder Bueno blanc, Oreo, fraise, banane, mangue, coco, Snickers, spéculoos. Supplément parfum 0,50 €.</p><div class="price">4,50 €</div></div></article>
@@ -699,7 +714,8 @@
         </div>
       </div>
 
-      <div class="panel" id="p-drinks" role="tabpanel" aria-labelledby="tab-p-drinks" tabindex="0" hidden>
+      <div class="panel" id="p-drinks">
+        <h3 class="panel__title">Boissons</h3>
         <div class="compose" style="margin-top:0">
           <div class="compose__cols">
             <div>
@@ -889,28 +905,42 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <script>
-/* ---- onglets ---- */
+/* ---- onglets : raccourcis de défilement vers chaque section de la carte ---- */
 (function(){
   var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
-  function select(t){
-    tabs.forEach(function(o){
-      o.setAttribute('aria-selected','false'); o.tabIndex = -1;
-      document.getElementById(o.dataset.panel).hidden = true;
-    });
-    t.setAttribute('aria-selected','true'); t.tabIndex = 0;
-    document.getElementById(t.dataset.panel).hidden = false;
+  if(!tabs.length) return;
+  var panels = tabs.map(function(t){ return document.getElementById(t.dataset.panel); });
+  var mq = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  var reduceMotion = !!(mq && mq.matches);
+
+  function setActive(tab){
+    tabs.forEach(function(o){ o.classList.toggle('is-active', o === tab); });
   }
-  tabs.forEach(function(t,i){
-    t.tabIndex = t.getAttribute('aria-selected') === 'true' ? 0 : -1;
-    t.addEventListener('click', function(){ select(t); });
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){
+      var panel = document.getElementById(t.dataset.panel);
+      if(panel) panel.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      setActive(t);
+    });
     t.addEventListener('keydown', function(e){
       var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
       if(!d) return;
       e.preventDefault();
       var n = tabs[(i + d + tabs.length) % tabs.length];
-      select(n); n.focus();
+      n.focus(); n.click();
     });
   });
+
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(!en.isIntersecting) return;
+        var idx = panels.indexOf(en.target);
+        if(idx > -1) setActive(tabs[idx]);
+      });
+    }, { rootMargin: '-35% 0px -55% 0px' });
+    panels.forEach(function(p){ if(p) io.observe(p); });
+  }
 })();
 </script>
 <script>
@@ -1198,33 +1228,6 @@
 
   function boot(gsap, SplitText){
 
-    /* ---- curseur personnalisé (pointeur fin uniquement) ---- */
-    function initCursor(){
-      if(!finePointer) return;
-      var cursor = document.getElementById('cursor');
-      if(!cursor) return;
-      var xTo = gsap.quickTo(cursor, 'x', { duration:.15, ease:'power3.out' });
-      var yTo = gsap.quickTo(cursor, 'y', { duration:.15, ease:'power3.out' });
-      var shown = false;
-      window.addEventListener('mousemove', function(e){
-        xTo(e.clientX); yTo(e.clientY);
-        if(!shown){
-          shown = true;
-          cursor.classList.add('is-on');
-          document.body.classList.add('has-cursor');
-        }
-      });
-      document.addEventListener('mouseover', function(e){
-        var t = e.target.closest && e.target.closest('a, button, .tab, .card, .spot, .poster');
-        if(t) cursor.classList.add('is-hover');
-      });
-      document.addEventListener('mouseout', function(e){
-        var t = e.target.closest && e.target.closest('a, button, .tab, .card, .spot, .poster');
-        if(t) cursor.classList.remove('is-hover');
-      });
-      document.documentElement.addEventListener('mouseleave', function(){ cursor.classList.remove('is-on'); });
-    }
-
     /* ---- boutons magnétiques ---- */
     function initMagnetic(selector, strength){
       strength = strength || .3;
@@ -1265,25 +1268,25 @@
         }
       }
 
-      var current = document.querySelector('.tab[aria-selected="true"]');
+      var current = document.querySelector('.tab.is-active');
       if(current) moveTo(current, false);
 
       var mo = new MutationObserver(function(muts){
         muts.forEach(function(m){
-          if(m.attributeName !== 'aria-selected') return;
+          if(m.attributeName !== 'class') return;
           var t = m.target;
-          if(t.getAttribute('aria-selected') === 'true') moveTo(t, true);
+          if(t.classList.contains('is-active')) moveTo(t, true);
         });
       });
-      tabs.forEach(function(t){ mo.observe(t, { attributes: true, attributeFilter: ['aria-selected'] }); });
+      tabs.forEach(function(t){ mo.observe(t, { attributes: true, attributeFilter: ['class'] }); });
 
       window.addEventListener('resize', function(){
-        var sel = document.querySelector('.tab[aria-selected="true"]');
+        var sel = document.querySelector('.tab.is-active');
         if(sel) moveTo(sel, false);
       });
       if(document.fonts && document.fonts.ready){
         document.fonts.ready.then(function(){
-          var sel = document.querySelector('.tab[aria-selected="true"]');
+          var sel = document.querySelector('.tab.is-active');
           if(sel) moveTo(sel, false);
         });
       }
@@ -1533,7 +1536,6 @@
     }
 
     /* ---- lancement ---- */
-    initCursor();
     initMagnetic('.hero__cta .btn', .3);
     initMagnetic('.collect__cta .btn', .3);
     initTabPill();
